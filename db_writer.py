@@ -71,9 +71,10 @@ class DBWriter:
             )
         return query_result
 
-    def _create_metadata_from_json_df(self, row: pd.Series) -> Dict:
+    def _create_metadata_from_df_row(self, row: pd.Series) -> Dict:
         # TODO: use this in upsert
         # TODO: when embedding, combine title and subtitle? Some articles seem to rely on subtitle for meaning and title is more catchy
+        row = row.fillna("") # TODO: better way of handling nulls in columns?
         metadata = {
             "sub_title": row["subTitle"],
             "date_published" : row["datePublished"],
@@ -84,8 +85,10 @@ class DBWriter:
             "url": row["url"],
             "categories": row["sourceCategory"],
             "word_count": row["wordCount"], 
+            "word_count": row["wordCount"], 
+            "word_count": row["wordCount"], 
             "language": row["language"],
-            "page_count": row["page_count"],
+            "page_count": row["pageCount"],
             "issue_number": row["issueNumber"],
             "volume_number": row["volumeNumber"],
             "publisher": row["publisher"]
@@ -99,15 +102,17 @@ class DBWriter:
     def process_row(self, row: pd.Series):
         # combine title and subtitle
         # TODO: chunk? look at title trends first?
+        # TODO: preserve original title? but preprocessing is minimal...
         combined_title = " ".join([str(row["title"]), str(row["subTitle"]) if str(row["subTitle"]) not in ["NaN", "nan"] else ""])
-        # cleaned_title = 
-        return combined_title
-            # ^preprocess?
-            # embed
-            # create metadata
-            # batched upsert :)
+        cleaned_title = re.sub(" +", " ", "".join(char for char in combined_title if char.isalnum() or char == " ")).strip()
+        # print(f"CLEANED TITLE: {cleaned_title}")
+        embedded_title = self.data_handler._embed_entry(cleaned_title)
+        # print(f"EMBEDDED TITLE: {embedded_title}")
+        row_metadata = self._create_metadata_from_df_row(row)
+        # print(f"ROW METADATA: {row_metadata}")
+        return {"title_embedding" : embedded_title, "metadata" : row_metadata}
+            # TODO: batched upsert :) (back in the run method)
         
-    
     def run(self):
         # load data as pd df self.article_data 
         self._load_data()

@@ -33,10 +33,8 @@ class DataHandler:
         'unigramCount', 
         'bigramCount', 
         'trigramCount', 
-        'volumeNumber', 
         'pagination', 
         'outputFormat', 
-        'language', 
         'pageEnd', 
         'pageStart', 
         'identifier'
@@ -62,7 +60,9 @@ class DataHandler:
         )
         encoded_input = {k: v for k, v in encoded_input.items()}
         model_output = self.model(**encoded_input)
-        return model_output
+        # NOTE: the embedding is not the only model output, getting it from the last hidden state
+        embedding = model_output.last_hidden_state[:, 0].numpy()[0]
+        return embedding
 
     def embed_all_entries(self):
         pass
