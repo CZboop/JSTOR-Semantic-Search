@@ -61,14 +61,9 @@ class DataHandler:
         encoded_input = {k: v for k, v in encoded_input.items()}
         model_output = self.model(**encoded_input)
         # NOTE: the embedding is not the only model output, getting it from the last hidden state
-        embedding = model_output.last_hidden_state[:, 0].numpy()[0]
+        embedding = model_output.last_hidden_state[:, 0].numpy()[0].tolist()
         return embedding
 
-    def embed_all_entries(self):
-        pass
-        # TODO: embed the column to be queried in each piece of data (title?)
-        # TODO: decide flow and return type eg is this before metadata creation and preserve whole entry? or just return embeddings
-    
     def _cleanup_data(self):
         pass
         # TODO: may or may not need depending on closer look at the data, if there's anything to drop or any text preprocessing (initial thought may need to combine multiple bits of text? e.g. check abstracts, titles, subtitles)
