@@ -8,6 +8,7 @@ from typing import Tuple, Dict
 import os
 import pinecone
 import re
+from tqdm import tqdm
 
 '''
 TAKING LOADED DATA AND WRITING TO A PINECONE VECTOR DATABASE
@@ -46,6 +47,7 @@ class DBWriter:
     def _pinecone_init_index_client(self):
         pinecone.init(api_key=self.PINECONE_API_KEY, environment=self.PINECONE_ENV)
         self.pinecone_client = pinecone.Index(self.index_name)
+        return self.pinecone_client
     
     def _pinecone_insert_embeddings(self, embeddings: List):
         if not hasattr(self, "pinecone_client"):
@@ -96,8 +98,19 @@ class DBWriter:
         return metadata
 
     def _batched_upsert(self, batch_size= 100):
-        pass
-        # TODO: upsert to pinecone in batches, max should be 100 at a time
+        if not hasattr(self, "processed_row_array"):
+            raise Exception("Needs processed row array, use the run method") # TODO: better handle?
+        # NOTE: upsert to pinecone in batches, max should be 100 at a time
+        all_ids = [str(i + 1) for i in range(len(self.processed_row_array))]
+        batched_rows = [self.processed_row_array[i:i + batch_size] for i in range(0, len(self.processed_row_array), batch_size)]
+        batched_ids = [all_ids[i:i + batch_size] for i in range(0, len(all_ids), batch_size)]
+        # print(batched_ids)
+        for count, batch in enumerate(tqdm(batched_rows, desc="Upserting vectors in batches")):
+            batched_vectors = [row["title_embedding"] for row in batch]
+            batched_metadata = [row["metadata"] for row in batch]
+            current_ids = batched_ids[count]
+            upsert_result = self.pinecone_client.upsert(vectors = zip(current_ids, batched_vectors, batched_metadata))
+            # print(upsert_result)
 
     def process_row(self, row: pd.Series):
         # combine title and subtitle
@@ -106,11 +119,13 @@ class DBWriter:
         combined_title = " ".join([str(row["title"]), str(row["subTitle"]) if str(row["subTitle"]) not in ["NaN", "nan"] else ""])
         cleaned_title = re.sub(" +", " ", "".join(char for char in combined_title if char.isalnum() or char == " ")).strip()
         # print(f"CLEANED TITLE: {cleaned_title}")
-        embedded_title = self.data_handler._embed_entry(cleaned_title)
+        embedded_title = self.data_handler._embed_entry(cleaned_title).tolist()
         # print(f"EMBEDDED TITLE: {embedded_title}")
         row_metadata = self._create_metadata_from_df_row(row)
         # print(f"ROW METADATA: {row_metadata}")
-        return {"title_embedding" : embedded_title, "metadata" : row_metadata}
+        processed_row = {"title_embedding" : embedded_title, "metadata" : row_metadata}
+        self.processed_row_array.append(processed_row)
+        return processed_row
             # TODO: batched upsert :) (back in the run method)
         
     def run(self):
@@ -122,12 +137,16 @@ class DBWriter:
         self._pinecone_init_index_client()
         # for each row in data
         # TODO: how to store this for upsert (from process row)
-        article_data.apply(self.process_row)
+        tqdm.pandas(desc='Applying embedding and metadata processing')
+        self.processed_row_array = []
+        self.article_data.progress_apply(self.process_row, axis = 1)
+        # print(self.processed_row_array[:5])
+        self._batched_upsert()
 
 if __name__ == "__main__":
     # run some methods to sense check during dev
-    print('reached eof')
     db_writer = DBWriter()
-    db_writer._pinecone_init_index()
-    data = db_writer._load_data()
-    print(db_writer.process_row(data.iloc[0]))
+    db_writer.run()
+    # db_writer._pinecone_init_index()
+    # data = db_writer._load_data()
+    # print(db_writer.process_row(data.iloc[0]))
