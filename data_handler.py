@@ -17,7 +17,7 @@ class DataHandler:
     def _load_data(self):
         json_df = pd.read_json(path_or_buf=self.path_to_data, lines=True)
         self.json_df = json_df
-        print(json_df.head)
+        # print(json_df.head)
         return json_df
 
     def _make_hf_dataset_from_data(self):
@@ -45,7 +45,7 @@ class DataHandler:
             self._load_data()
         new_df = self.json_df.drop(columns = cols_to_remove)
         self.json_df = new_df
-        print(self.json_df)
+        # print(self.json_df)
         return new_df
     
     def _load_model(self):
@@ -89,8 +89,9 @@ class DataHandler:
 
     def run(self):
         self._load_data()
-        self._remove_columns()
+        data = self._remove_columns()
         self._load_model()
+        return data
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from typing import Tuple, Dict
 import os
 import pinecone
+import re
 
 '''
 TAKING LOADED DATA AND WRITING TO A PINECONE VECTOR DATABASE
@@ -18,6 +19,11 @@ class DBWriter:
         self.path_to_data = path_to_data
         self.data_handler = DataHandler(self.path_to_data)
         self._load_env_vars()
+
+    def _load_data(self) -> pd.DataFrame:
+        article_data = self.data_handler.run()
+        self.article_data = article_data
+        return article_data
 
     def _load_env_vars(self) -> Tuple[str]:
         load_dotenv()
@@ -51,6 +57,7 @@ class DBWriter:
     def _pinecone_delete_index(self):
         pinecone.delete_index(self.index_name)
 
+    # TODO: does this need to be separate?
     def _pinecone_query_index(self, query_string: str, top_n: int = 5) -> Dict:
         if not hasattr(self, "pinecone_client"):
             self._pinecone_init_index_client()
@@ -65,20 +72,57 @@ class DBWriter:
         return query_result
 
     def _create_metadata_from_json_df(self, row: pd.Series) -> Dict:
-        # TODO: get metadata from row and put into dict, use this in upsert
-        metadata = {}
+        # TODO: use this in upsert
+        # TODO: when embedding, combine title and subtitle? Some articles seem to rely on subtitle for meaning and title is more catchy
+        metadata = {
+            "sub_title": row["subTitle"],
+            "date_published" : row["datePublished"],
+            "creator" : row["creator"],
+            "document_type" : row["docType"],
+            "document_sub_type": row["docSubType"],
+            "parent_publication": row["isPartOf"],
+            "url": row["url"],
+            "categories": row["sourceCategory"],
+            "word_count": row["wordCount"], 
+            "language": row["language"],
+            "page_count": row["page_count"],
+            "issue_number": row["issueNumber"],
+            "volume_number": row["volumeNumber"],
+            "publisher": row["publisher"]
+        }
         return metadata
 
     def _batched_upsert(self, batch_size= 100):
         pass
         # TODO: upsert to pinecone in batches, max should be 100 at a time
+
+    def process_row(self, row: pd.Series):
+        # combine title and subtitle
+        # TODO: chunk? look at title trends first?
+        combined_title = " ".join([str(row["title"]), str(row["subTitle"]) if str(row["subTitle"]) not in ["NaN", "nan"] else ""])
+        # cleaned_title = 
+        return combined_title
+            # ^preprocess?
+            # embed
+            # create metadata
+            # batched upsert :)
+        
     
     def run(self):
-        pass
-        # TODO:?
+        # load data as pd df self.article_data 
+        self._load_data()
+        # init index if not already exists
+        self._pinecone_init_index()
+        # init index client as self.pinecone_client
+        self._pinecone_init_index_client()
+        # for each row in data
+        # TODO: how to store this for upsert (from process row)
+        article_data.apply(self.process_row)
 
 if __name__ == "__main__":
     # run some methods to sense check during dev
     print('reached eof')
     db_writer = DBWriter()
     db_writer._pinecone_init_index()
+    data = db_writer._load_data()
+    print(db_writer.process_row(data.iloc[0]))
