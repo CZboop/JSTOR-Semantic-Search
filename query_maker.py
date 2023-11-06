@@ -23,12 +23,15 @@ class QueryMaker:
         query_result = self.pinecone_client.query(
             vector= embedded_query,
             top_k= top_n,
-            include_values= True
+            # include_values= True,
+            include_metadata= True,
+            filter= metadata_filters
             )
         return query_result
 
 if __name__ == "__main__":
     # sense checks during dev
     query_maker = QueryMaker()
-    query_result = query_maker._query_index("19th century french poetry")
+    query_result = query_maker._query_index("modernist poetry by women")
+    # NOTE: if using euclidean distance vs other metrics be aware for interpreting score :)
     print(query_result)

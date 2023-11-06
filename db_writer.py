@@ -41,8 +41,6 @@ class DBWriter:
             "url": row["url"],
             "categories": row["sourceCategory"],
             "word_count": row["wordCount"], 
-            "word_count": row["wordCount"], 
-            "word_count": row["wordCount"], 
             "language": row["language"],
             "page_count": row["pageCount"],
             "issue_number": row["issueNumber"],
