@@ -18,7 +18,7 @@ logging.basicConfig(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # TODO: startup from running the db_writer, create index and upsert all data
+    # TODO: startup from running the db_writer, create index and upsert all data, load model
     logger.info("Starting API...")
     yield
 
