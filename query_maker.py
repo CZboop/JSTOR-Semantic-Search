@@ -21,8 +21,9 @@ class QueryMaker:
                 }
             }
         '''
-        # TODO: how to handle different types of metadata filters and multiple at once, plus the main text query
-        # TODO: would the above depend on how adding frontend? not big factor though
+        # removing None for optional metadata from api before giving to query
+        if metadata_filters != {}:
+            metadata_filters = {k: v for k, v in metadata_filters.items() if v is not None}
         if not hasattr(self, "pinecone_client"):
             self.pinecone_client = self.db_client.run()
         # embed the query string with data handler
