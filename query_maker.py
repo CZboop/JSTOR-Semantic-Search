@@ -13,6 +13,14 @@ class QueryMaker:
         self.db_client = DBClient(self.index_name)
 
     def _query_index(self, query_string: str, top_n: int = 5, metadata_filters: Dict = {}) -> Dict:
+        '''
+        NOTE: metadata filters going for this type of structure
+            {
+                metadata name : {
+                    operator : filter value
+                }
+            }
+        '''
         # TODO: how to handle different types of metadata filters and multiple at once, plus the main text query
         # TODO: would the above depend on how adding frontend? not big factor though
         if not hasattr(self, "pinecone_client"):
