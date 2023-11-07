@@ -6,3 +6,13 @@ body {
   font-family: 'Kanit', sans-serif;
   padding: 1em;
 }
+
+.query-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+
+}

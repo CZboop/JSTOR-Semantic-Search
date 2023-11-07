@@ -2,6 +2,7 @@
 FASTAPI APP FOR MAKING QUERIES TO VECTOR DATABASE
 '''
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from query_maker import QueryMaker
 from metadata import Metadata
@@ -29,6 +30,18 @@ app = FastAPI(
     lifespan = lifespan,
     )
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 query_maker = QueryMaker()
 
 # TODO: refactor other classes to reduce compute on each query
@@ -42,3 +55,5 @@ async def query_database(query_string: str) -> Dict:
 async def query_database_with_filters(query_string: str, metadata: Metadata):
     result = query_maker._query_index(query_string = query_string, metadata_filters = metadata.dict()).to_dict()
     return result
+
+# TODO: for nicer frontend experience, pull the possible options for the discrete metadata from db?
