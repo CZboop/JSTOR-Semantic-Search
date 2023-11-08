@@ -5,6 +5,13 @@ import SearchResult from './components/SearchResult.js';
 function App() {
   const [queryString, setQueryString] = useState("");
   const [queryResponse, setQueryResponse] = useState([]);
+  const [dateFrom, setDateFrom] = useState("2017");
+  const [dateTo, setDateTo] = useState("2023");
+  const [wordsFrom, setWordsFrom] = useState(1);
+  const [wordsTo, setWordsTo] = useState(50000);
+  const [pagesFrom, setPagesFrom] = useState(1);
+  const [pagesTo, setPagesTo] = useState(500);
+  const [docType, setDocType] = useState("Articles")
 
   const makeQuery = async (e) => {
     e.preventDefault()
@@ -26,16 +33,83 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>JSTOR Semantic Search</h1>
+        <h3>Search by meaning, not keywords!</h3>
       </header>
       <form className='query-form' onSubmit={makeQuery}>
-          <label> 
-            Query string:
-            <input type='text' value={queryString} onChange={(e) => setQueryString(e.target.value)} required/>
-          </label>
-          <label>
-            Filters
-            {/* TODO: filters once string only query can be made and show results*/}
-          </label>
+        <div className='queryStringContainer'>
+          <label>Search query: </label>
+          <input id='searchBar' type='text' value={queryString} onChange={(e) => setQueryString(e.target.value)} required/>
+          
+          </div>
+          <hr></hr>
+          <div className='filtersContainer'>
+          <h4 id='filtersHeading'>
+            Filters (optional)
+          </h4>
+          <div className='filterContainer'>
+          <h5>Word count:</h5>
+          <div className='filterInputs'>
+            <p>From:</p>
+            <input type="number" className='wordCountInput' id="wordCountFrom" name="wordCountFrom" min="1" 
+            value={wordsFrom} onChange={(e) => setWordsFrom(e.target.value)}
+            />
+            <p>To:</p>
+            <input type="number" className='wordCountInput' id="wordCountTo" name="wordCountTo" min="1"
+            value={wordsTo} onChange={(e) => setWordsTo(e.target.value)}
+            />
+            </div>
+          </div>
+          <div className='filterContainer'>
+          <h5>Page count:</h5>
+          <div className='filterInputs'>
+            <p>From:</p>
+            <input type="number" className='pageCountInput' id="pageCountFrom" name="pageCountFrom" min="1"
+            value={pagesFrom} onChange={(e) => setPagesFrom(e.target.value)}
+            />
+            <p>To:</p>
+            <input type="number" className='pageCountInput' id="pageCountTo" name="pageCountTo" min="1"
+            value={pagesTo} onChange={(e) => setPagesTo(e.target.value)}
+            />
+            </div>
+          </div>
+          {/* TODO: further be able to filter once you have results, based on their values which will be more limited? */}
+          <div className='filterContainer'>
+          <h5>Date:</h5>
+          <p>(yyyy or yyyy/mm or yyyy/mm/dd)</p>
+          {/* (yyyy or yyyy/mm or yyyy/mm/dd) dates to allow user friendly way to go far back */}
+          <div className='filterInputs'>
+            <p>From:</p>
+            <input type="text" id="dateFrom" name="dateFrom"
+            value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
+            />
+            <p>To:</p>
+            <input type="text" id="dateTo" name="dateTo"
+            value={dateTo} onChange={(e) => setDateTo(e.target.value)}
+            />
+            </div>
+          </div>
+          <div className='filterContainer'>
+          <h5>Document Type:</h5>
+          {/* Types of content (map value to how show in metadata): 
+          Articles
+          Research Reports
+          Reviews
+          Miscellaneous
+          Books */}
+          <select name="docTypes" id="docTypes" 
+          value={docType} onChange={(e) => setDocType(e.target.value)}
+          >
+            <option value="article">Articles</option>
+            <option value="report">Research Reports</option>
+            <option value="review">Reviews</option>
+            <option value="book">Books</option>
+            <option value="miscellaneous">Miscellaneous</option>
+          </select>
+          </div>
+          
+            {/* NOTE: believe the endpoint with metadata could be fine with no metadata if removes all keys from dict? */}
+          
+          </div>
           <button >Submit</button>
         </form>
         <div className='search-results'>
