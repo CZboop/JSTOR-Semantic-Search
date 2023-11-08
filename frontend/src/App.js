@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import SearchResult from './components/SearchResult.js';
+import API from './API.js';
 
 function App() {
   const [queryString, setQueryString] = useState("");
@@ -11,19 +12,19 @@ function App() {
   const [wordsTo, setWordsTo] = useState(50000);
   const [pagesFrom, setPagesFrom] = useState(1);
   const [pagesTo, setPagesTo] = useState(500);
-  const [docType, setDocType] = useState("Articles")
+  const [docType, setDocType] = useState("Articles");
 
   const makeQuery = async (e) => {
     e.preventDefault()
-    const response = await fetch("http://localhost:8000/api/v1/query/" + queryString,
-      {
-        method: 'get'
-      }
-    )
-    const result = await response.json()
-    const resultMatches = result["matches"]
+    const result = await API.post('/api/v1/filter-query/' + queryString, 
+    {
+      "document_type": {"$eq" : "article"},
+      "word_count": {"$gte": 2000}
+  })
+    const resultMatches = result.data["matches"]
     setQueryResponse(resultMatches);
     console.log(resultMatches);
+    // TODO: error handling for http errors etc.?
   }
 
   useEffect(() => {},

@@ -51,8 +51,9 @@ async def query_database(query_string: str) -> Dict:
     result = query_maker._query_index(query_string = query_string, metadata_filters = {}).to_dict()
     return result
 
-@app.get("/api/v1/filter-query/{query_string}")
+@app.post("/api/v1/filter-query/{query_string}")
 async def query_database_with_filters(query_string: str, metadata: Metadata):
+    print(metadata)
     result = query_maker._query_index(query_string = query_string, metadata_filters = metadata.dict()).to_dict()
     return result
 
