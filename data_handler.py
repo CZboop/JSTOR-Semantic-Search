@@ -88,7 +88,5 @@ class DataHandler:
         self._load_model()
         return data
 
-
 if __name__ == "__main__":
     data_handler = DataHandler()
-    # NOTE: look into/fix NaNs in some data...

@@ -18,7 +18,7 @@ class Metadata(BaseModel):
     categories: Optional[Dict[str, str]] = None
     word_count: Optional[Dict[str, int]] = None
     language: Optional[Dict[str, str]] = None
-    page_count: Optional[Dict[str, str]] = None
+    page_count: Optional[Dict[str, int]] = None
     issue_number: Optional[Dict[str, str]] = None
     volume_number: Optional[Dict[str, str]] = None
     publisher: Optional[Dict[str, str]] = None

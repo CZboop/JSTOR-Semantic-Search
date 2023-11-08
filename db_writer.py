@@ -42,7 +42,7 @@ class DBWriter:
             "categories": row["sourceCategory"],
             "word_count": row["wordCount"], 
             "language": row["language"],
-            "page_count": row["pageCount"],
+            "page_count": int(row["pageCount"]), # casting to allow filtering if greater than etc.
             "issue_number": row["issueNumber"],
             "volume_number": row["volumeNumber"],
             "publisher": row["publisher"]

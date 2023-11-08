@@ -13,18 +13,29 @@ function App() {
   const [pagesFrom, setPagesFrom] = useState(1);
   const [pagesTo, setPagesTo] = useState(500);
   const [docType, setDocType] = useState("Articles");
+  const [DBFilters, setDBFilters] = useState({});
+
+  // turning into filters that can be passed to pinecone from the form data
+  const makeDBFiltersFromForm = () => {
+    const filters = {
+      "page_count": {"$gte" : parseInt(pagesFrom, 10), "$lte" : parseInt(pagesTo, 10)},
+      "word_count": {"$gte" : parseInt(wordsFrom, 10), "$lte" : parseInt(wordsTo, 10)}
+    };
+    // TODO: some ternaries to handle one or the other of the range being null?
+    // TODO: update/convert date type in the api/python side...
+    setDBFilters(filters);
+  }
 
   const makeQuery = async (e) => {
     e.preventDefault()
-    const result = await API.post('/api/v1/filter-query/' + queryString, 
-    {
-      "document_type": {"$eq" : "article"},
-      "word_count": {"$gte": 2000}
-  })
-    const resultMatches = result.data["matches"]
+    console.log(DBFilters);
+    const result = await API.post('/api/v1/filter-query/' + queryString, DBFilters);
+    const resultMatches = result.data["matches"];
     setQueryResponse(resultMatches);
     console.log(resultMatches);
     // TODO: error handling for http errors etc.?
+    // TODO: handle response but no matching results found
+    // TODO: properly switch between searches/make multiple searches without refresh
   }
 
   useEffect(() => {},
@@ -39,7 +50,10 @@ function App() {
       <form className='query-form' onSubmit={makeQuery}>
         <div className='queryStringContainer'>
           <label>Search query: </label>
-          <input id='searchBar' type='text' value={queryString} onChange={(e) => setQueryString(e.target.value)} required/>
+          <input id='searchBar' type='text' value={queryString} onChange={(e) => {
+            setQueryString(e.target.value);
+            makeDBFiltersFromForm();
+            }} required/>
           
           </div>
           <hr></hr>
@@ -52,11 +66,17 @@ function App() {
           <div className='filterInputs'>
             <p>From:</p>
             <input type="number" className='wordCountInput' id="wordCountFrom" name="wordCountFrom" min="1" 
-            value={wordsFrom} onChange={(e) => setWordsFrom(e.target.value)}
+            value={wordsFrom} onChange={(e) => {
+              setWordsFrom(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             <p>To:</p>
             <input type="number" className='wordCountInput' id="wordCountTo" name="wordCountTo" min="1"
-            value={wordsTo} onChange={(e) => setWordsTo(e.target.value)}
+            value={wordsTo} onChange={(e) => {
+              setWordsTo(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             </div>
           </div>
@@ -65,11 +85,17 @@ function App() {
           <div className='filterInputs'>
             <p>From:</p>
             <input type="number" className='pageCountInput' id="pageCountFrom" name="pageCountFrom" min="1"
-            value={pagesFrom} onChange={(e) => setPagesFrom(e.target.value)}
+            value={pagesFrom} onChange={(e) => {
+              setPagesFrom(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             <p>To:</p>
             <input type="number" className='pageCountInput' id="pageCountTo" name="pageCountTo" min="1"
-            value={pagesTo} onChange={(e) => setPagesTo(e.target.value)}
+            value={pagesTo} onChange={(e) => {
+              setPagesTo(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             </div>
           </div>
@@ -81,11 +107,17 @@ function App() {
           <div className='filterInputs'>
             <p>From:</p>
             <input type="text" id="dateFrom" name="dateFrom"
-            value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
+            value={dateFrom} onChange={(e) => {
+              setDateFrom(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             <p>To:</p>
             <input type="text" id="dateTo" name="dateTo"
-            value={dateTo} onChange={(e) => setDateTo(e.target.value)}
+            value={dateTo} onChange={(e) => {
+              setDateTo(e.target.value);
+              makeDBFiltersFromForm();
+            }}
             />
             </div>
           </div>
@@ -98,7 +130,10 @@ function App() {
           Miscellaneous
           Books */}
           <select name="docTypes" id="docTypes" 
-          value={docType} onChange={(e) => setDocType(e.target.value)}
+          value={docType} onChange={(e) => {
+            setDocType(e.target.value);
+            makeDBFiltersFromForm();
+          }}
           >
             <option value="article">Articles</option>
             <option value="report">Research Reports</option>
