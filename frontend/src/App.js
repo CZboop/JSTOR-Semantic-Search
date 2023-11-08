@@ -41,7 +41,27 @@ function App() {
         <div className='search-results'>
           {
             queryResponse.length > 0 ?
-            queryResponse.map(response => <SearchResult title={response.metadata.title} url={response.metadata.url} />)
+            <>
+            <hr className='resultsRuler'></hr>
+            <h2>Search Results</h2>
+            {queryResponse.map(response => 
+              <SearchResult 
+                title={response.metadata.title} 
+                subtitle={response.metadata.sub_title} 
+                date={response.metadata.date_published}
+                authors={response.metadata.creator} // array
+                pageCount={response.metadata.page_count} // float convert to int?
+                publication={response.metadata.parent_publication}
+                volume={response.metadata.volume_number}
+                issue={response.metadata.issue_number}
+                publisher={response.metadata.publisher}
+                languages={response.metadata.language} // array
+                wordCount={response.metadata.word_count} // float to convert?
+                url={response.metadata.url} 
+                key={response.metadata.url} 
+              />)
+            }
+            </>
             :
             <></>
           }

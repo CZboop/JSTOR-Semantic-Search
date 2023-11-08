@@ -1,0 +1,29 @@
+.SearchResult {
+    border-radius: 10px;
+    border: 2px solid rgb(255, 166, 0);
+    padding: 0.75em;
+    padding-top: 0.5em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background-color: rgb(77, 77, 255);
+}
+
+.SearchResult a {
+    text-decoration: white dotted underline;
+    color: rgb(255, 166, 0);
+}
+
+.SearchResult a:hover {
+    text-decoration: white wavy underline;
+    color: rgb(250, 202, 112);
+}
+
+h5, h4 {
+    padding: 0.1em;
+    margin: 0.1em;
+}
+
+h4 {
+    /* padding: 0.1em; */
+    margin-top: 0.15em;
+}
