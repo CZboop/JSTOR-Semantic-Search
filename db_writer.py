@@ -9,6 +9,8 @@ import os
 import pinecone
 import re
 from tqdm import tqdm
+from datetime import datetime
+import time
 
 '''
 TAKING LOADED DATA AND WRITING TO A PINECONE VECTOR DATABASE
@@ -30,10 +32,15 @@ class DBWriter:
         # TODO: use this in upsert
         # TODO: when embedding, combine title and subtitle? Some articles seem to rely on subtitle for meaning and title is more catchy
         row = row.fillna("") # TODO: better way of handling nulls in columns?
+
+        published_date = datetime.strptime(row["datePublished"], "%Y-%m-%d")
+        published_date = published_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        published_date = int(time.mktime(published_date.timetuple()))
+
         metadata = {
             "title": row["title"],
             "sub_title": row["subTitle"],
-            "date_published" : row["datePublished"],
+            "date_published" : published_date,
             "creator" : row["creator"],
             "document_type" : row["docType"],
             "document_sub_type": row["docSubType"],

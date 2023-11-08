@@ -17,9 +17,12 @@ function App() {
 
   // turning into filters that can be passed to pinecone from the form data
   const makeDBFiltersFromForm = () => {
+    // TODO: convert back to readable date format before displaying to user
+    // TODO: ensure values updated before submit, seems the last updated state doesn't always update fast enough...
     const filters = {
       "page_count": {"$gte" : parseInt(pagesFrom, 10), "$lte" : parseInt(pagesTo, 10)},
-      "word_count": {"$gte" : parseInt(wordsFrom, 10), "$lte" : parseInt(wordsTo, 10)}
+      "word_count": {"$gte" : parseInt(wordsFrom, 10), "$lte" : parseInt(wordsTo, 10)},
+      "date_published": {"$gte" : dateFrom, "$lte" : dateTo}
     };
     // TODO: some ternaries to handle one or the other of the range being null?
     // TODO: update/convert date type in the api/python side...

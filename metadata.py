@@ -2,7 +2,6 @@
 JUST THE 'METADATA' PYDANTIC CLASS TO GIVE THE API METADATA FILTERS
 '''
 from pydantic import BaseModel
-from datetime import datetime
 from typing import Dict, Optional
 
 class Metadata(BaseModel):
@@ -10,7 +9,7 @@ class Metadata(BaseModel):
     # TODO: some of these could be better to have multiple e.g. word count in range, multiple categories, can used and/or in pinecone query, look into how to do in api?
     title : Optional[Dict[str, str]] = None
     sub_title: Optional[Dict[str, str]] = None
-    date_published: Optional[Dict[str, datetime]] = None
+    date_published: Optional[Dict[str, str]] = None
     creator: Optional[Dict[str, str]] = None
     document_type: Optional[Dict[str, str]] = None
     document_sub_type: Optional[Dict[str, str]] = None
