@@ -46,14 +46,14 @@ query_maker = QueryMaker()
 
 # TODO: refactor other classes to reduce compute on each query
 
-@app.get("/api/v1/query/{query_string}")
-async def query_database(query_string: str) -> Dict:
-    result = query_maker._query_index(query_string = query_string, metadata_filters = {}).to_dict()
+@app.get("/api/v1/query/{query_string}/{top_n}")
+async def query_database(query_string: str, top_n: int) -> Dict:
+    result = query_maker._query_index(query_string = query_string, metadata_filters = {}, top_n = top_n).to_dict()
     return result
 
-@app.post("/api/v1/filter-query/{query_string}")
-async def query_database_with_filters(query_string: str, metadata: Metadata):
-    result = query_maker._query_index(query_string = query_string, metadata_filters = metadata.dict()).to_dict()
+@app.post("/api/v1/filter-query/{query_string}/{top_n}")
+async def query_database_with_filters(query_string: str, metadata: Metadata, top_n: int):
+    result = query_maker._query_index(query_string = query_string, metadata_filters = metadata.dict(), top_n = top_n).to_dict()
     return result
 
 # TODO: for nicer frontend experience, pull the possible options for the discrete metadata from db?
