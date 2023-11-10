@@ -1,36 +1,38 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import SearchResult from './components/SearchResult.js';
 import API from './API.js';
+import Modal from './components/Modal.js';
+
+export const ModalContext = createContext();
 
 function App() {
   const [queryString, setQueryString] = useState("");
   const [queryResponse, setQueryResponse] = useState([]);
-  const [dateFrom, setDateFrom] = useState("2017");
-  const [dateTo, setDateTo] = useState("2023");
+
+  const [dateFrom, setDateFrom] = useState("2017-01-01");
+  const [dateTo, setDateTo] = useState("2023-12-12");
   const [wordsFrom, setWordsFrom] = useState(1);
   const [wordsTo, setWordsTo] = useState(50000);
   const [pagesFrom, setPagesFrom] = useState(1);
   const [pagesTo, setPagesTo] = useState(500);
   const [docType, setDocType] = useState("Articles");
-  const [DBFilters, setDBFilters] = useState({});
   const [topK, setTopK] = useState(5);
 
-  // turning into filters that can be passed to pinecone from the form data
-  const makeDBFiltersFromForm = (form) => {
-    const filters = {
-      "page_count": {"$gte" : parseInt(form.pageCountFrom.value, 10), "$lte" : parseInt(form.pageCountTo.value, 10)},
-      "word_count": {"$gte" : parseInt(form.wordCountFrom.value, 10), "$lte" : parseInt(form.wordCountTo.value, 10)},
-      "date_published": {"$gte" : form.dateFrom.value.replaceAll("-", "/"), "$lte" : form.dateTo.value.replaceAll("-", "/")},
-      "document_type": {"$eq": form.docTypes.value}
-    };
-    setDBFilters(filters);
-  }
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Error");
+  const [modalMessage, setModalMessage] = useState("Something went wrong");
 
   const makeQuery = async (e) => {
     e.preventDefault()
-    makeDBFiltersFromForm(e.target);
-    // console.log(DBFilters);
+    // turning the form data into filters that can be passed to pinecone, doing this way to prevent state being out of date
+    let DBFilters = {
+      "page_count": {"$gte" : parseInt(e.target.pageCountFrom.value, 10), "$lte" : parseInt(e.target.pageCountTo.value, 10)},
+      "word_count": {"$gte" : parseInt(e.target.wordCountFrom.value, 10), "$lte" : parseInt(e.target.wordCountTo.value, 10)},
+      "date_published": {"$gte" : e.target.dateFrom.value.replaceAll("-", "/"), "$lte" : e.target.dateTo.value.replaceAll("-", "/")},
+      "document_type": {"$eq": e.target.docTypes.value}
+    };
+    console.log(DBFilters);
     try{ 
       const result = await API.post(`/api/v1/filter-query/${queryString}/${topK}`, DBFilters);
       const resultMatches = result.data["matches"];
@@ -39,14 +41,15 @@ function App() {
         console.log(resultMatches);
       }
       else{
-        console.log("NO RESULTS!");
-        // TODO: modal to say no results returned try again, try without filters first etc.
+        setModalMessage("No results were found for that query. Try again, maybe clearing any filters first");
+        setModalTitle("No Results");
+        setModalOpen(true);
       }
 
     } catch (e) {
-      console.log("SOMETHING WENT WRONG, SEE ERROR MESSAGE BELOW");
-      console.log(e.toJSON());
-      // TODO: modal with diff messages depending on error?
+      setModalMessage("Something went wrong: " + JSON.stringify(e.toJSON().message));
+      setModalTitle("Error While Making Request");
+      setModalOpen(true);
     }
     
   }
@@ -60,6 +63,9 @@ function App() {
         <h1>JSTOR Semantic Search</h1>
         <h3>Search by meaning, not keywords!</h3>
       </header>
+      <ModalContext.Provider value={{setModalOpen, setModalTitle, setModalMessage}}>
+          <Modal open={modalOpen} title={modalTitle} message={modalMessage} />
+      </ModalContext.Provider>
       <form className='query-form' onSubmit={makeQuery}>
         <div className='queryStringContainer'>
           <label>Search query: </label>

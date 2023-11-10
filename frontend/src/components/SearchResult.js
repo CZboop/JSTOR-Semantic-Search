@@ -2,12 +2,6 @@ import React from 'react';
 import './SearchResult.css';
 
 function SearchResult({title, subtitle, url, date, authors, pageCount, publication, volume, issue, publisher, languages, wordCount}) {
-                // publication={response.metadata.parent_publication}
-                // volume={response.metadata.volume_number}
-                // issue={response.metadata.issue_number}
-                // publisher={response.metadata.publisher}
-                // language={response.metadata.language} // array
-                // wordCount={response.metadata.word_count}
   return (
     <div className='SearchResult'>
     <h3>{title}{subtitle.length > 0 ? " - " +  subtitle : ""}</h3>

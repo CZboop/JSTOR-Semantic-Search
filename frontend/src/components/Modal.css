@@ -1,0 +1,42 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modalContent {
+    width: 60%;
+    margin: auto;
+    margin-top: 10%;
+    color: white;
+    background: rgb(77, 77, 255);
+    z-index: 1000;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid white;
+    transform: 'translate(-50%, -50%)';
+    position: relative;
+}
+
+.modalHeader {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+#exitModalButton {
+    background-color: rgb(77, 77, 255);
+    padding: 0.3em;
+    font-weight: 900;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    margin: 0.5em;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+}
