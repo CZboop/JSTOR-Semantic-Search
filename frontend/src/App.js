@@ -14,6 +14,7 @@ function App() {
   const [pagesTo, setPagesTo] = useState(500);
   const [docType, setDocType] = useState("Articles");
   const [DBFilters, setDBFilters] = useState({});
+  const [topK, setTopK] = useState(5);
 
   // turning into filters that can be passed to pinecone from the form data
   const makeDBFiltersFromForm = () => {
@@ -28,7 +29,7 @@ function App() {
   const makeQuery = async (e) => {
     e.preventDefault()
     console.log(DBFilters);
-    const result = await API.post('/api/v1/filter-query/' + queryString, DBFilters);
+    const result = await API.post(`/api/v1/filter-query/${queryString}/${topK}`, DBFilters);
     const resultMatches = result.data["matches"];
     setQueryResponse(resultMatches);
     console.log(resultMatches);
@@ -50,6 +51,16 @@ function App() {
             setQueryString(e.target.value);
             makeDBFiltersFromForm();
             }} required/>
+          
+          </div>
+          <div className='topKContainer'>
+          <label>Number of results: </label>
+          <input id='topK' type='number' value={topK} onChange={(e) => {
+            setTopK(e.target.value);
+            makeDBFiltersFromForm();
+            }} 
+            min="1" max="50"
+            required/>
           
           </div>
           <hr></hr>

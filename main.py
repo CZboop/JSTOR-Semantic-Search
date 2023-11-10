@@ -29,7 +29,6 @@ async def lifespan(app: FastAPI):
     query_maker = QueryMaker()
     logger.info("Loading embedding model...")
     query_maker.data_handler._load_model()
-    logger.info("Startup complete :)")
     yield
 
 app = FastAPI(

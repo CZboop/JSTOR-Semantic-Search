@@ -51,7 +51,7 @@ class QueryMaker:
             }
         '''
         if not hasattr(self, "pinecone_client"):
-            self.pinecone_client = self.db_client.run()
+            self.pinecone_client, index_init = self.db_client.run()
         # removing None for optional metadata from api before giving to query
         if metadata_filters != {}:
             metadata_filters = {k: v for k, v in metadata_filters.items() if v is not None}
