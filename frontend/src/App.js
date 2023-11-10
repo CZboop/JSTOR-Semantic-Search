@@ -21,7 +21,7 @@ function App() {
     const filters = {
       "page_count": {"$gte" : parseInt(form.pageCountFrom.value, 10), "$lte" : parseInt(form.pageCountTo.value, 10)},
       "word_count": {"$gte" : parseInt(form.wordCountFrom.value, 10), "$lte" : parseInt(form.wordCountTo.value, 10)},
-      "date_published": {"$gte" : form.dateFrom.value, "$lte" : form.dateTo.value},
+      "date_published": {"$gte" : form.dateFrom.value.replaceAll("-", "/"), "$lte" : form.dateTo.value.replaceAll("-", "/")},
       "document_type": {"$eq": form.docTypes.value}
     };
     setDBFilters(filters);
@@ -30,11 +30,25 @@ function App() {
   const makeQuery = async (e) => {
     e.preventDefault()
     makeDBFiltersFromForm(e.target);
-    console.log(DBFilters);
-    const result = await API.post(`/api/v1/filter-query/${queryString}/${topK}`, DBFilters);
-    const resultMatches = result.data["matches"];
-    setQueryResponse(resultMatches);
-    console.log(resultMatches);
+    // console.log(DBFilters);
+    try{ 
+      const result = await API.post(`/api/v1/filter-query/${queryString}/${topK}`, DBFilters);
+      const resultMatches = result.data["matches"];
+      if (resultMatches.length > 0) {
+        setQueryResponse(resultMatches);
+        console.log(resultMatches);
+      }
+      else{
+        console.log("NO RESULTS!");
+        // TODO: modal to say no results returned try again, try without filters first etc.
+      }
+
+    } catch (e) {
+      console.log("SOMETHING WENT WRONG, SEE ERROR MESSAGE BELOW");
+      console.log(e.toJSON());
+      // TODO: modal with diff messages depending on error?
+    }
+    
   }
 
   useEffect(() => {},
@@ -105,17 +119,15 @@ function App() {
           {/* TODO: further be able to filter once you have results, based on their values which will be more limited? */}
           <div className='filterContainer'>
           <h5>Date:</h5>
-          <p>(yyyy or yyyy/mm or yyyy/mm/dd)</p>
-          {/* (yyyy or yyyy/mm or yyyy/mm/dd) dates to allow user friendly way to go far back */}
           <div className='filterInputs'>
             <p>From:</p>
-            <input type="text" id="dateFrom" name="dateFrom"
+            <input type="date" id="dateFrom" name="dateFrom"
             value={dateFrom} onChange={(e) => {
               setDateFrom(e.target.value);
             }}
             />
             <p>To:</p>
-            <input type="text" id="dateTo" name="dateTo"
+            <input type="date" id="dateTo" name="dateTo"
             value={dateTo} onChange={(e) => {
               setDateTo(e.target.value);
             }}
