@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from query_maker import QueryMaker
+from db_writer import DBWriter
 from metadata import Metadata
 import logging
 from typing import Dict
@@ -13,14 +14,22 @@ import pinecone
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level = logging.INFO,
-    format = "%(asctime)s: %(funcName)s: %(levelname)s: %(message)s"
+    format = "%(levelname)s: %(message)s"
     )
     # TODO: format outputs / save logs
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    global query_maker
     # TODO: startup from running the db_writer, create index and upsert all data, load model
     logger.info("Starting API...")
+    db_writer = DBWriter()
+    logger.info("Setting up vector index...")
+    db_writer.run()
+    query_maker = QueryMaker()
+    logger.info("Loading embedding model...")
+    query_maker.data_handler._load_model()
+    logger.info("Startup complete :)")
     yield
 
 app = FastAPI(
@@ -41,10 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-query_maker = QueryMaker()
-
-# TODO: refactor other classes to reduce compute on each query
 
 @app.get("/api/v1/query/{query_string}/{top_n}")
 async def query_database(query_string: str, top_n: int) -> Dict:

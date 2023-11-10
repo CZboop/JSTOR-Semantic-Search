@@ -58,7 +58,6 @@ class QueryMaker:
         # if date in filters, converting to a format that can be compared to other dates
         if "date_published" in metadata_filters.keys():
             metadata_filters["date_published"].update((k, self._convert_date_format_from_string(v)) for k,v in metadata_filters["date_published"].items())
-        print(f"UPDATED METADATA: {metadata_filters}")
         # embed the query string with data handler
         embedded_query = self.data_handler._embed_entry(query_string)
         # query the index against the embedded query

@@ -5,6 +5,13 @@ import pinecone
 import os
 from dotenv import load_dotenv
 from typing import Tuple, Dict, List
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level = logging.INFO,
+    format = "%(levelname)s: %(message)s"
+    )
 
 class DBClient:
     def __init__(self, index_name: str = 'jstor-semantic-search'):
@@ -24,7 +31,7 @@ class DBClient:
     def _init_index(self, dimensions: int = 768, metric: str ='euclidean'):
         existing_indexes = pinecone.list_indexes()
         if len(existing_indexes) > 0:
-            print("Index already found, not creating a new one") # TODO: logger with formatting
+            logger.info("Index already found, not creating a new one")
             # TODO: error handling if index mismatch with existing
             return None
         
@@ -40,6 +47,6 @@ class DBClient:
         pinecone.delete_index(self.index_name)
 
     def run(self):
-        self._init_index()
+        index_init = self._init_index()
         client = self._init_index_client()
-        return client
+        return client, index_init
