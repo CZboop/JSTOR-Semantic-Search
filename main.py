@@ -21,11 +21,11 @@ logging.basicConfig(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global query_maker
-    # TODO: startup from running the db_writer, create index and upsert all data, load model
     logger.info("Starting API...")
     db_writer = DBWriter()
-    logger.info("Setting up vector index...")
-    db_writer.run()
+    # TODO: is there nice way of optionally adding or not adding the data?
+    # logger.info("Setting up vector index...")
+    # db_writer.run()
     query_maker = QueryMaker()
     logger.info("Loading embedding model...")
     query_maker.data_handler._load_model()

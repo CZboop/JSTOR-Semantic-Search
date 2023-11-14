@@ -11,13 +11,18 @@ LOAD THE DATA INTO A DATAFRAME, CREATE PINECONE INDEX AND LOAD THE DATA INTO THA
 '''
 
 class DataHandler:
-    def __init__(self, path_to_data: str = './data/lit_articles_2017-2023/lit_articles_2017-2023.jsonl'):
-        self.path_to_data = path_to_data
+    def __init__(self, paths_to_data: List[str] = ['./data/lit_articles_2017-2023.jsonl', './data/lit_articles_2015-2016.jsonl']):
+        self.paths_to_data = paths_to_data
 
     def _load_data(self):
-        json_df = pd.read_json(path_or_buf=self.path_to_data, lines=True)
+        # TODO: multiple json files into one df
+        json_dfs = []
+        for file in self.paths_to_data:
+            df = pd.read_json(path_or_buf=file, lines=True)
+            json_dfs.append(df)
+        json_df = pd.concat(json_dfs, ignore_index=True)
+        
         self.json_df = json_df
-        # print(json_df.head)
         return json_df
 
     def _make_hf_dataset_from_data(self):

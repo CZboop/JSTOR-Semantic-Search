@@ -11,6 +11,7 @@ from tqdm import tqdm
 from datetime import datetime
 import time
 import logging
+import uuid
 
 '''
 TAKING LOADED DATA AND WRITING TO A PINECONE VECTOR DATABASE
@@ -23,11 +24,11 @@ logging.basicConfig(
     )
 
 class DBWriter:
-    def __init__(self, index_name: str = 'jstor-semantic-search', path_to_data: str = './data/lit_articles_2017-2023/lit_articles_2017-2023.jsonl'):
+    def __init__(self, index_name: str = 'jstor-semantic-search', paths_to_data: List[str] = ['./data/lit_articles_2017-2023.jsonl', './data/lit_articles_2015-2016.jsonl', 'lit_articles_2013-2014.jsonl']):
         self.index_name = index_name
-        self.path_to_data = path_to_data
+        self.paths_to_data = paths_to_data
         self.db_client = DBClient(self.index_name)
-        self.data_handler = DataHandler(self.path_to_data)
+        self.data_handler = DataHandler(self.paths_to_data)
 
     def _load_data(self) -> pd.DataFrame:
         article_data = self.data_handler.run()
@@ -64,7 +65,7 @@ class DBWriter:
         if not hasattr(self, "processed_row_array"):
             raise Exception("Needs processed row array, use the run method") # TODO: better handle?
         # NOTE: upsert to pinecone in batches, max should be 100 at a time
-        all_ids = [str(i + 1) for i in range(len(self.processed_row_array))]
+        all_ids = [str(uuid.uuid4()) for i in range(len(self.processed_row_array))]
         batched_rows = [self.processed_row_array[i:i + batch_size] for i in range(0, len(self.processed_row_array), batch_size)]
         batched_ids = [all_ids[i:i + batch_size] for i in range(0, len(all_ids), batch_size)]
 
@@ -88,23 +89,24 @@ class DBWriter:
         return processed_row
         
     def run(self):
+        # TODO: make this useable in api where doesn't always upload everything? basically add a flag for data upsert
         # load data as pd df self.article_data 
         self._load_data()
         # init index if not already exists and init index client as self.pinecone_client
         self.pinecone_client, index_init = self.db_client.run()
         # if new index was create, upsert all the data, otherwise do nothing and delete the index before running again
-        if index_init != None:
-            # for each row in data
-            tqdm.pandas(desc='Applying embedding and metadata processing')
-            self.processed_row_array = []
-            self.article_data.progress_apply(self.process_row, axis = 1)
-            self._batched_upsert()
-        else:
-            logger.info("No data added. If you want to add new data, delete the exist index and run again")
+        # if index_init != None:
+        # for each row in data
+        tqdm.pandas(desc='Applying embedding and metadata processing')
+        self.processed_row_array = []
+        self.article_data.progress_apply(self.process_row, axis = 1)
+        self._batched_upsert()
+        # else:
+        #     logger.info("No data added. If you want to add new data, delete the exist index and run again")
 
 if __name__ == "__main__":
     # run some methods to sense check during dev
-    client = DBClient()
-    client._delete_index()
-    db_writer = DBWriter()
+    # client = DBClient()
+    # client._delete_index()
+    db_writer = DBWriter(paths_to_data= ['./data/lit_articles_2013-2014.jsonl'])
     db_writer.run()

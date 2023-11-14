@@ -86,7 +86,7 @@ function App() {
           <hr></hr>
           <div className='filtersContainer'>
           <h4 id='filtersHeading'>
-            Filters (optional)
+            Filters
           </h4>
           <div className='filterContainer'>
           <h5>Word count:</h5>
@@ -95,13 +95,13 @@ function App() {
             <input type="number" className='wordCountInput' id="wordCountFrom" name="wordCountFrom" min="1" 
             value={wordsFrom} onChange={(e) => {
               setWordsFrom(e.target.value);
-            }}
+            }} required
             />
             <p>To:</p>
             <input type="number" className='wordCountInput' id="wordCountTo" name="wordCountTo" min="1"
             value={wordsTo} onChange={(e) => {
               setWordsTo(e.target.value);
-            }}
+            }} required
             />
             </div>
           </div>
@@ -112,7 +112,7 @@ function App() {
             <input type="number" className='pageCountInput' id="pageCountFrom" name="pageCountFrom" min="1"
             value={pagesFrom} onChange={(e) => {
               setPagesFrom(e.target.value);
-            }}
+            }} required
             />
             <p>To:</p>
             <input type="number" className='pageCountInput' id="pageCountTo" name="pageCountTo" min="1"
@@ -130,13 +130,13 @@ function App() {
             <input type="date" id="dateFrom" name="dateFrom"
             value={dateFrom} onChange={(e) => {
               setDateFrom(e.target.value);
-            }}
+            }} required
             />
             <p>To:</p>
             <input type="date" id="dateTo" name="dateTo"
             value={dateTo} onChange={(e) => {
               setDateTo(e.target.value);
-            }}
+            }} required
             />
             </div>
           </div>
