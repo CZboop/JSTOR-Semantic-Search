@@ -161,9 +161,6 @@ function App() {
             <option value="miscellaneous">Miscellaneous</option>
           </select>
           </div>
-          
-            {/* NOTE: believe the endpoint with metadata could be fine with no metadata if removes all keys from dict? */}
-          
           </div>
           <button >Submit</button>
         </form>
@@ -187,7 +184,7 @@ function App() {
                 languages={response.metadata.language} // array
                 wordCount={response.metadata.word_count} // float to convert?
                 url={response.metadata.url} 
-                key={response.metadata.url} 
+                key={response.id} 
               />)
             }
             </>

@@ -4,7 +4,7 @@
     padding: 1.5em;
     padding-top: 0.5em;
     margin-top: 2em;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
     background-color: var(--content-bg);
     box-shadow: rgb(0, 255, 204) 0 0 10px inset;
 }
@@ -27,3 +27,34 @@ h5, h4 {
 h4 {
     margin-top: 0.15em;
 }
+
+.resultSummary {
+    cursor: pointer;
+}
+
+.inlineSummary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+details>summary {
+ 
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none
+  }
+  
+  summary::after {
+    content: 'Details >';
+    font-size: small;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+  }
+
+  details[open] summary:after {
+    content: "Details ▼";
+  }
