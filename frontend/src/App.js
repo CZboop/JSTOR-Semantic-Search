@@ -59,14 +59,14 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>JSTOR Semantic Search</h1>
+      <header className="App-header contentContainer">
+        <h1>JSTOR Semantic Search 🕵️‍♀️</h1>
         <h3>Search by meaning, not keywords!</h3>
       </header>
       <ModalContext.Provider value={{setModalOpen, setModalTitle, setModalMessage}}>
           <Modal open={modalOpen} title={modalTitle} message={modalMessage} />
       </ModalContext.Provider>
-      <form className='query-form' onSubmit={makeQuery}>
+      <form className='query-form contentContainer' onSubmit={makeQuery}>
         <div className='queryStringContainer'>
           <label>Search query: </label>
           <input id='searchBar' name='searchBar' type='text' value={queryString} onChange={(e) => {

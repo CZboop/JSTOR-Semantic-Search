@@ -6,7 +6,7 @@ function SearchResult({title, subtitle, url, date, authors, pageCount, publicati
     <div className='SearchResult'>
     <h3>{title}{subtitle.length > 0 ? " - " +  subtitle : ""}</h3>
     <h4>Date: {date}</h4>
-    <h4>Author(s): {authors.join(", ")}</h4>
+    <h4>Author(s): {Array.isArray(authors)  ? authors.join(", ") : "N/A"}</h4>
     <h5>Page count: {pageCount}</h5>
     <h5>Publication: {publication} - Volume {volume}, Issue {issue}</h5>
     <h5>Publisher: {publisher}</h5>

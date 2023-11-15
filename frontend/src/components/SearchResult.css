@@ -1,21 +1,22 @@
 .SearchResult {
     border-radius: 10px;
-    border: 2px solid rgb(255, 166, 0);
-    padding: 0.75em;
+    border: 2px solid var(--highlight);
+    padding: 1.5em;
     padding-top: 0.5em;
     margin-top: 2em;
     margin-bottom: 2em;
-    background-color: rgb(77, 77, 255);
+    background-color: var(--content-bg);
+    box-shadow: rgb(0, 255, 204) 0 0 10px inset;
 }
 
 .SearchResult a {
-    text-decoration: white dotted underline;
-    color: rgb(255, 166, 0);
+    text-decoration: var(--highlight) dashed underline;
+    color: var(--highlight);
 }
 
 .SearchResult a:hover {
     text-decoration: white wavy underline;
-    color: rgb(250, 202, 112);
+    color: white;
 }
 
 h5, h4 {
@@ -24,6 +25,5 @@ h5, h4 {
 }
 
 h4 {
-    /* padding: 0.1em; */
     margin-top: 0.15em;
 }

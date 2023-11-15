@@ -12,14 +12,18 @@
     width: 60%;
     margin: auto;
     margin-top: 10%;
-    color: white;
-    background: rgb(77, 77, 255);
+    color: var(--highlight);
+    background: var(--content-bg);
     z-index: 1000;
-    padding: 1em;
+    padding: 2em;
     border-radius: 10px;
-    border: 2px solid white;
+    border: 2px solid var(--highlight);
     transform: 'translate(-50%, -50%)';
     position: relative;
+}
+
+.modalContent h2 {
+    margin-top: 0;
 }
 
 .modalHeader {
@@ -29,14 +33,20 @@
 }
 
 #exitModalButton {
-    background-color: rgb(77, 77, 255);
+    background-color: var(--content-bg);
     padding: 0.3em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     font-weight: 900;
-    color: white;
-    border: 2px solid white;
+    color: var(--highlight);
+    border: 2px solid var(--highlight);
     border-radius: 50%;
     margin: 0.5em;
     position: absolute;
     top: -20px;
     right: -20px;
+}
+
+#exitModalButton:hover {
+ cursor: pointer;
 }
