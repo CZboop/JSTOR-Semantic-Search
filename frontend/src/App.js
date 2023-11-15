@@ -83,7 +83,6 @@ function App() {
             required/>
           
           </div>
-          <hr></hr>
           <div className='filtersContainer'>
           <h4 id='filtersHeading'>
             Filters
@@ -193,6 +192,7 @@ function App() {
           }
 
         </div>
+        <a href='#' className='scrollTop'>^^Back to top^^</a>
     </div>
   );
 }

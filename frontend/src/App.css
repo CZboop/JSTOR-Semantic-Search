@@ -6,12 +6,16 @@
   --highlight: rgb(0, 255, 204);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: rgb(94, 45, 255);
-  color: rgb(0, 255, 204);
+  background-color: var(--bg);
+  color: var(--highlight);
   font-family: 'Space Mono', monospace;
   padding: 1em;
-  background-image: radial-gradient(rgb(0, 255, 204) 1px, transparent 0);
+  background-image: radial-gradient(var(--highlight) 1px, transparent 0);
   background-size: 15px 15px;
 }
 
@@ -23,23 +27,25 @@ hr {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  border: 2px solid rgb(0, 255, 204);
+  border: 2px solid var(--highlight);
   padding: 1.5em;
   margin-top: 2em;
   margin-bottom: 2em;
-  background-color: rgb(119, 78, 252);
-  box-shadow: rgb(0, 255, 204) 0 0 10px inset;
+  background-color: var(--content-bg);
+  box-shadow: var(--highlight) 0 0 10px inset;
 }
 
 .App-header {
   padding-top: 0.5em;
   padding-bottom: 1em;
+  border-radius: 30%;
+  text-align: center;
 }
 
 .query-form button {
   font-weight: bold;
-  background-color: rgb(0, 255, 204);
-  color: rgb(94, 45, 255);
+  background-color: var(--highlight);
+  color: var(--bg);
   font-family: 'Space Mono', monospace;
   border-radius: 10px;
   border: none;
@@ -47,9 +53,10 @@ hr {
   padding: 0.3em;
 }
 .query-form button:hover {
-  background-color: rgb(110, 252, 223);
-  color: rgb(94, 45, 255);
-  box-shadow: rgb(0, 255, 204) 0 0 10px;
+  background-color: var(--highlight);
+  color: var(--bg);
+  box-shadow: var(--highlight) 0 0 10px;
+  transition: all 0.2s;
 }
 
 .query-form {
@@ -93,4 +100,30 @@ h3 {
 h1 {
   margin: 0;
   padding: 0;
+}
+
+.scrollTop {
+  font-weight: bold;
+  background-color: var(--content-bg);
+  color: var(--highlight);
+  border-radius: 30%;
+  padding: 0.3em;
+  border: 2px solid var(--highlight);
+  text-decoration: none;
+  position: fixed;
+  right: 30px;
+  bottom: 15px;
+  display: inline-flex;
+  justify-content: center;
+  text-align: center;
+  box-shadow: var(--highlight) 0 0 10px;
+  transition: 0.4s ease-out;
+}
+
+.scrollTop:hover {
+  background-color: var(--highlight);
+  color: var(--bg);
+  box-shadow: var(--highlight) 0 0 10px;
+  transition: 0.2s ease-out;
+  /* transform: translateY(-2px); */
 }

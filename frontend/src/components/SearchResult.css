@@ -2,7 +2,7 @@
     border-radius: 10px;
     border: 2px solid var(--highlight);
     padding: 1.5em;
-    padding-top: 0.5em;
+    padding-top: 1em;
     margin-top: 2em;
     margin-bottom: 1em;
     background-color: var(--content-bg);
@@ -17,6 +17,7 @@
 .SearchResult a:hover {
     text-decoration: white wavy underline;
     color: white;
+    transition: all 0.2s;
 }
 
 h5, h4 {
