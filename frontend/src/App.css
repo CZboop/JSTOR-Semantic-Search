@@ -17,6 +17,8 @@ body {
   padding: 1em;
   background-image: radial-gradient(var(--highlight) 1px, transparent 0);
   background-size: 15px 15px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 hr {
@@ -162,4 +164,73 @@ input[type=date] {
   padding: 0.2em;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
+}
+
+@media all and (max-width: 600px) {
+  .filterInputs {
+    display: flex;
+    flex-direction: column;
+  }
+  body {
+    padding: 0.1em;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .contentContainer {
+    padding: 0.5em;
+    margin: 0.5em;
+  }
+  .App-header {
+    padding-top: 0;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    font-size: small;
+  }
+  .resultsRuler {
+    margin-top: 1.5em;
+  }
+  input[type=number] {
+    border-radius: 10px;
+    border: none;
+    padding: 0.1em;
+    padding-left: 0.75em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+  }
+  input[type=date] {
+    border-radius: 10px;
+    border: none;
+    padding: 0.1em;
+    padding-left: 0.75em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+  }
+  input[type=text] {
+    border-radius: 10px;
+    border: none;
+    padding: 0.1em;
+    padding-left: 0.75em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+  }
+  .formHeading {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  #searchBar {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+  }
+  .query-form button {
+    margin-top: 0.5em;
+  }
+  p {
+    font-size: x-small;
+  }
+  .formHeading {
+    font-size: small;
+  }
+  #subTitle {
+    font-size: 0;
+  }
 }

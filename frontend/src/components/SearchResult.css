@@ -59,3 +59,14 @@ details>summary {
   details[open] summary:after {
     content: "Details ▼";
   }
+
+  @media all and (max-width: 600px) {
+    .inlineSummary {
+      display: flex;
+      flex-direction: column;
+    }
+    .inlineSummary h5 {
+        padding: 0;
+        margin: 0;
+    }
+  }

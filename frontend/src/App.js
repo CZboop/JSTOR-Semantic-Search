@@ -61,7 +61,7 @@ function App() {
     <div className="App">
       <header className="App-header contentContainer">
         <h1>JSTOR Semantic Search 🕵️‍♀️</h1>
-        <h3>Search by meaning, not keywords!</h3>
+        <h3 id='subTitle'>Search by meaning, not keywords!</h3>
       </header>
       <ModalContext.Provider value={{setModalOpen, setModalTitle, setModalMessage}}>
           <Modal open={modalOpen} title={modalTitle} message={modalMessage} />
