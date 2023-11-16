@@ -74,6 +74,7 @@ label {
 
 #searchBar {
   margin-top: 1em;
+  margin-bottom: 1em;
   border-radius: 10px;
   border: none;
   padding: 0.3em;
@@ -125,5 +126,40 @@ h1 {
   color: var(--bg);
   box-shadow: var(--highlight) 0 0 10px;
   transition: 0.2s ease-out;
-  /* transform: translateY(-2px); */
+}
+
+.formHeading {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+select {
+  padding: 0.3em;
+  margin: 0.2em;
+  border-radius: 10px;
+}
+
+option {
+  font-family: 'Kanit', sans-serif;
+  padding: 0.2em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+input[type=number] {
+  border-radius: 10px;
+  border: none;
+  padding: 0.2em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+input[type=date] {
+  border-radius: 10px;
+  border: none;
+  padding: 0.2em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
 }

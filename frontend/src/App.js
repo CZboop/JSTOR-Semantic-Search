@@ -74,7 +74,7 @@ function App() {
             }} required/>
           
           </div>
-          <div className='topKContainer'>
+          <div className='formHeading'>
           <label>Number of results: </label>
           <input id='topK' name='topK' type='number' value={topK} onChange={(e) => {
             setTopK(e.target.value);
@@ -84,19 +84,19 @@ function App() {
           
           </div>
           <div className='filtersContainer'>
-          <h4 id='filtersHeading'>
+          <h4 id='filtersHeading' className='formHeading'>
             Filters
           </h4>
           <div className='filterContainer'>
-          <h5>Word count:</h5>
+          <h5 className='formHeading'>Word count:</h5>
           <div className='filterInputs'>
-            <p>From:</p>
+            <p className='formHeading'>From:</p>
             <input type="number" className='wordCountInput' id="wordCountFrom" name="wordCountFrom" min="1" 
             value={wordsFrom} onChange={(e) => {
               setWordsFrom(e.target.value);
             }} required
             />
-            <p>To:</p>
+            <p className='formHeading'>To:</p>
             <input type="number" className='wordCountInput' id="wordCountTo" name="wordCountTo" min="1"
             value={wordsTo} onChange={(e) => {
               setWordsTo(e.target.value);
@@ -105,15 +105,15 @@ function App() {
             </div>
           </div>
           <div className='filterContainer'>
-          <h5>Page count:</h5>
+          <h5 className='formHeading'>Page count:</h5>
           <div className='filterInputs'>
-            <p>From:</p>
+            <p className='formHeading'>From:</p>
             <input type="number" className='pageCountInput' id="pageCountFrom" name="pageCountFrom" min="1"
             value={pagesFrom} onChange={(e) => {
               setPagesFrom(e.target.value);
             }} required
             />
-            <p>To:</p>
+            <p className='formHeading'>To:</p>
             <input type="number" className='pageCountInput' id="pageCountTo" name="pageCountTo" min="1"
             value={pagesTo} onChange={(e) => {
               setPagesTo(e.target.value);
@@ -123,15 +123,15 @@ function App() {
           </div>
           {/* TODO: further be able to filter once you have results, based on their values which will be more limited? */}
           <div className='filterContainer'>
-          <h5>Date:</h5>
+          <h5 className='formHeading'>Date:</h5>
           <div className='filterInputs'>
-            <p>From:</p>
+            <p className='formHeading'>From:</p>
             <input type="date" id="dateFrom" name="dateFrom"
             value={dateFrom} onChange={(e) => {
               setDateFrom(e.target.value);
             }} required
             />
-            <p>To:</p>
+            <p className='formHeading'>To:</p>
             <input type="date" id="dateTo" name="dateTo"
             value={dateTo} onChange={(e) => {
               setDateTo(e.target.value);
@@ -140,7 +140,7 @@ function App() {
             </div>
           </div>
           <div className='filterContainer'>
-          <h5>Document Type:</h5>
+          <h5 className='formHeading'>Document Type:</h5>
           {/* Types of content (map value to how show in metadata): 
           Articles
           Research Reports
