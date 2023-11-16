@@ -121,7 +121,6 @@ function App() {
             />
             </div>
           </div>
-          {/* TODO: further be able to filter once you have results, based on their values which will be more limited? */}
           <div className='filterContainer'>
           <h5 className='formHeading'>Date:</h5>
           <div className='filterInputs'>

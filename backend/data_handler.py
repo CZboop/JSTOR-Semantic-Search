@@ -15,7 +15,6 @@ class DataHandler:
         self.paths_to_data = paths_to_data
 
     def _load_data(self):
-        # TODO: multiple json files into one df
         json_dfs = []
         for file in self.paths_to_data:
             df = pd.read_json(path_or_buf=file, lines=True)
@@ -68,10 +67,6 @@ class DataHandler:
         # NOTE: the embedding is not the only model output, getting it from the last hidden state
         embedding = model_output.last_hidden_state[:, 0].numpy()[0].tolist()
         return embedding
-
-    def _cleanup_data(self):
-        pass
-        # TODO: may or may not need depending on closer look at the data, if there's anything to drop or any text preprocessing (initial thought may need to combine multiple bits of text? e.g. check abstracts, titles, subtitles)
 
     def _print_data_cols(self):
         '''
