@@ -11,8 +11,9 @@ LOAD THE DATA INTO A DATAFRAME, CREATE PINECONE INDEX AND LOAD THE DATA INTO THA
 '''
 
 class DataHandler:
-    def __init__(self, paths_to_data: List[str] = ['./data/lit_articles_2017-2023.jsonl', './data/lit_articles_2015-2016.jsonl']):
+    def __init__(self, paths_to_data: List[str] = ['./data/lit_articles_2017-2023.jsonl', './data/lit_articles_2015-2016.jsonl'], embedding_model: str = 'sentence-transformers/multi-qa-mpnet-base-dot-v1'):
         self.paths_to_data = paths_to_data
+        self.embedding_model = embedding_model
 
     def _load_data(self):
         json_dfs = []
@@ -23,14 +24,6 @@ class DataHandler:
         
         self.json_df = json_df
         return json_df
-
-    def _make_hf_dataset_from_data(self):
-        if not hasattr(self, "json_df"):
-            self._load_data()
-            self._remove_columns()
-        dataset = Dataset.from_pandas(self.json_df)
-        self.dataset = dataset
-        return dataset
 
     def _remove_columns(self, cols_to_remove: List[str] = 
         [
@@ -51,7 +44,7 @@ class DataHandler:
         return new_df
     
     def _load_model(self):
-        self.model_ckpt = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
+        self.model_ckpt = self.embedding_model
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_ckpt)
         self.model = TFAutoModel.from_pretrained(self.model_ckpt, from_pt=True)
         return self.model
