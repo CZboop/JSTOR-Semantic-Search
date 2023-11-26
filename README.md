@@ -19,7 +19,7 @@ Through the API, the dictionary of metadata filters should directly reflect the 
 To get set up with Python and the dependencies to run this project:
 
 * If Python is not installed, install it from [this link](https://www.python.org/downloads/).  
-* Clone this repository, then navigate to the directory it is in.  
+* Clone this repository, then navigate to the directory it is in and the/backend folder.  
 * Set up a virtual environment using:  
 ```$ python -m venv <evironment_name>```  
 * Activate the virtual environment. For Windows cmd, this is done using:  
@@ -27,7 +27,7 @@ To get set up with Python and the dependencies to run this project:
 [This link](https://docs.python.org/3/library/venv.html) shows how to do this for other operating systems and shell types.
 * Install dependencies using:  
 ```$ pip install -r requirements.txt ```  
-* After navigating to the directory with the desired file, one of the Python files can be run using:  
+* One of the Python files can be run using:  
 ```$ python <filename>.py```  
 
 #### Pinecone Setup 🌲
