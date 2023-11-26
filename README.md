@@ -30,7 +30,7 @@ To get set up with Python and the dependencies to run this project:
 * After navigating to the directory with the desired file, one of the Python files can be run using:  
 ```$ python <filename>.py```  
 
-#### Pinecone Setup
+#### Pinecone Setup 🌲
 * Create a Pinecone account if needed on [their website](https://www.pinecone.io/). Each user can create one free index at a time, and you can delete and remake this index as many times as you want.
 * Get your API key and environment from the 'API Keys' page
 * Save these in a file called .env in the backend folder, in the following format:
@@ -39,7 +39,7 @@ To get set up with Python and the dependencies to run this project:
   PINECONE_ENV='<YOUR ENVIRONMENT>'
   ```
 
-#### Adding Data
+#### Adding Data 💾
 To add data to your Pinecone index:
 * First download a dataset or multiple datasets from [Constellate](https://constellate.org/). There are limits to how many documents can be in each dataset but you can pull multiple.
 * Extract your data and move it into a directory within this cloned project, ideally a /data folder in the /backend directory.
@@ -48,12 +48,12 @@ To add data to your Pinecone index:
 
 This should embed and upsert all the items in the dataset into your Pinecone index. Note, this adds to the current index, so if you want only the new data to be inside the index, you should delete the index first which can be done with the ._delete_index() method of the DBClient class within this repository.
 
-#### Running the API
+#### Running the API 🏃
 From the /backend folder, the API can be run by either:
 - ```$ uvicorn main:app``` Which won't update the API with any development changes, but can be shut down easily with a Ctrl + c in the terminal
 - ```$ uvicorn main:app --reload``` Which will update the API with any development changes, but won't shut down with Ctrl + c
 
-#### API Endpoints
+#### API Endpoints 🌐
 The API has two endpoints, one for a simple query only search, and one for a search with query plus metadata filters. However, the way that the filters are processed means that the filtered endpoint will work with an empty dict, and is therefore the only endpoint called from the web app.
 
 `GET` **`/api/v1/query/{query_string}/{top_n}`**
