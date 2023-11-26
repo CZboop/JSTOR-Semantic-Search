@@ -122,21 +122,31 @@ class TestDataHandler(unittest.TestCase):
 
     # == TEST EMBED ENTRY == #
 
-    # returns expected dimensions/type
-    # NOTE: do different models need different process? i.e. what do with the last hidden state
-    def test_XXX(self):
-        pass
+    # NOTE: will differ by model!
+    def test_embed_entry_returns_expected_type_and_dimensions(self):
+        # given - an instance of the undertest data handler and a string to embed
+        undertest = DataHandler(paths_to_data = [f'{CURRENT_DIR}/test_data/test_data1.jsonl'])
+        string_to_embed = "JSTOR is a fantastic resource for open access academic materials"
 
-    # == TEST PRINT DATA COLS == #
+        # when - we call the embed entry method
+        actual_embedding = undertest._embed_entry(string_to_embed)
+        expected_len = 768
 
-    # prints all the data cols in df
-    # returns these too (no need to test just pandas?)
-    def test_XXX(self):
-        pass
+        # then - the embedding returned is a list of floats with the expected dimensions for the current model
+        self.assertTrue(type(actual_embedding) == list)
+        self.assertTrue(all(type(i) == float for i in actual_embedding))
+        self.assertEqual(len(actual_embedding), expected_len)
 
     # == TEST RUN == #
 
-    # run creates attrs from loading data and model
-    # after run can embed an entry successfully
-    def test_XXX(self):
-        pass
+    def test_run_creates_attrs_from_loading_model_and_data(self):
+        # given - an instance of the undertest data handler
+        undertest = DataHandler(paths_to_data = [f'{CURRENT_DIR}/test_data/test_data1.jsonl'])
+
+        # when - we call the run method
+        undertest.run()
+
+        # then - the undertest instance has the expected model, tokenizer and data attributes
+        self.assertTrue(hasattr(undertest, 'model'))
+        self.assertTrue(hasattr(undertest, 'tokenizer'))
+        self.assertTrue(hasattr(undertest, 'json_df'))
