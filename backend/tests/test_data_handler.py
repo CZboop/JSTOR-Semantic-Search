@@ -4,6 +4,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 import json
 import pathlib
+import transformers.models
 
 CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
 
@@ -76,25 +77,48 @@ class TestDataHandler(unittest.TestCase):
         # when - we call the load data method
         actual_df = undertest._load_data()
         expected_df = pd.DataFrame.from_dict(data_as_dicts1)
-        # then - a dataframe version of the data is returned
+        # then - a dataframe version of the combined data is returned
         assert_frame_equal(actual_df, expected_df)
 
     # == TEST REMOVE COLUMNS == #
 
-    # removes expected columns and returns new one
-    def test_XXX(self):
-        pass
+    def test_remove_columns_removes_the_expected_columns_and_returns_updated_df(self):
+        # given - an instance of the undertest data handler reading in some data
+        undertest = DataHandler(paths_to_data = [f'{CURRENT_DIR}/test_data/test_data1.jsonl', f'{CURRENT_DIR}/test_data/test_data2.jsonl'])
+        
+        # when - we call the remove columns method passing in some columns to remove
+        actual_df = undertest._remove_columns(['docType', 'doi', 'unigramCount', 'bigramCount', 'trigramCount', 'creator', 'volumeNumber'])
+        actual_columns = sorted(actual_df.columns)
+        expected_columns = sorted(['datePublished', 'docSubType', 'id', 'identifier', 'isPartOf', 'issueNumber', 'language', 'outputFormat', 'pageCount', 'pageEnd', 'pageStart', 'pagination', 'provider', 'publicationYear', 'publisher', 'sourceCategory', 'tdmCategory', 'title', 'url', 'wordCount', 'subTitle', 'abstract', 'keyphrase'])
 
-    # updates .json_df class attr with the columns removed
+        # then - the dataframe returned doesn't have the removed columns
+        self.assertListEqual(actual_columns, expected_columns)
+
+    def test_remove_columns_updates_the_json_df_class_attr_with_new_columns(self):
+        # given - an instance of the undertest data handler reading in some data
+        undertest = DataHandler(paths_to_data = [f'{CURRENT_DIR}/test_data/test_data1.jsonl', f'{CURRENT_DIR}/test_data/test_data2.jsonl'])
+        
+        # when - we call the remove columns method passing in some columns to remove
+        actual_df = undertest._remove_columns(['docType', 'doi', 'unigramCount', 'bigramCount', 'trigramCount', 'creator', 'volumeNumber'])
+        actual_columns = sorted(undertest.json_df.columns)
+        expected_columns = sorted(['datePublished', 'docSubType', 'id', 'identifier', 'isPartOf', 'issueNumber', 'language', 'outputFormat', 'pageCount', 'pageEnd', 'pageStart', 'pagination', 'provider', 'publicationYear', 'publisher', 'sourceCategory', 'tdmCategory', 'title', 'url', 'wordCount', 'subTitle', 'abstract', 'keyphrase'])
+
+        # then - the dataframe in the class attribute doesn't have the removed columns
+        self.assertListEqual(actual_columns, expected_columns)
 
     # == TEST LOAD MODEL == #
 
-    # make model dynamic before testing! i.e. pass in the model name and use
-    # returns model
-    # sets model attr
-    # sets tokenzier attr
-    def test_XXX(self):
-        pass
+    # NOTE: multiple assertions in one test case as this takes a few secs
+    def test_load_model_returns_sets_model_and_tokenizer_as_class_attr(self):
+        # given - an instance of the undertest data handler
+        undertest = DataHandler(paths_to_data = [f'{CURRENT_DIR}/test_data/test_data1.jsonl'])
+
+        # when - we call the load model method
+        actual_model = undertest._load_model()
+
+        # then - the undertest instance has the expected model and tokenizer attributes
+        self.assertTrue(hasattr(undertest, 'model'))
+        self.assertTrue(hasattr(undertest, 'tokenizer'))
 
     # == TEST EMBED ENTRY == #
 
