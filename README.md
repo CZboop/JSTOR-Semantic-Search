@@ -48,6 +48,11 @@ To add data to your Pinecone index:
 
 This should embed and upsert all the items in the dataset into your Pinecone index. Note, this adds to the current index, so if you want only the new data to be inside the index, you should delete the index first which can be done with the ._delete_index() method of the DBClient class within this repository.
 
+#### Running the API
+From the /backend folder, the API can be run by either:
+- ```$ uvicorn main:app``` Which won't update the API with any development changes, but can be shut down easily with a Ctrl + c in the terminal
+- ```$ uvicorn main:app --reload``` Which will update the API with any development changes, but won't shut down with Ctrl + c
+
 #### API Endpoints
 The API has two endpoints, one for a simple query only search, and one for a search with query plus metadata filters. However, the way that the filters are processed means that the filtered endpoint will work with an empty dict, and is therefore the only endpoint called from the web app.
 
@@ -111,4 +116,9 @@ Both endpoints return the same type of response, with main results as an array w
 ```
 
 ### Frontend Setup ⚛️
-
+Once the backend is set up and the API is running, you should be able to use the web app to interact with the API and search more easily.
+To do this:
+- Navigate to the /frontend folder in the cloned respository (in a separate terminal from the one running the API)
+- Run ```$ npm install``` to install dependencies
+- Run ```$ npm start``` to start the web app locally
+- The site should open automatically, and you can also navigate to http://localhost:3000/ to use it
